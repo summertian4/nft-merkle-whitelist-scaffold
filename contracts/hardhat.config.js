@@ -10,7 +10,7 @@ const {
    POLYGON_API_URL,
    MAINNET_API_URL,
    PUBLISHER_PRIVATE_KEY,
-   API_KEY
+   SCAN_API_KEY
 } = process.env;
 module.exports = {
    solidity: "0.8.1",
@@ -41,11 +41,11 @@ module.exports = {
       }
    },
    etherscan: {
-      // Your API key for Etherscan
-      // Obtain one at https://etherscan.io/
+      // Your API key for Etherscan / polygonscan...
+      // Obtain one at https://etherscan.io/ or https://polygonscan.com ...
       apiKey: {
-         polygon: API_KEY,
-         polygonMumbai: API_KEY
+         polygon: SCAN_API_KEY,
+         polygonMumbai: SCAN_API_KEY
       }
    }
 }
