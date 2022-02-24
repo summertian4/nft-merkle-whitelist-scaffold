@@ -35,3 +35,5 @@ screenshot
 
 .env
 *.dbg.json
+contracts/artifacts/build-info
+contracts/cache

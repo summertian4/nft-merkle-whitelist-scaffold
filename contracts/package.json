@@ -1,17 +1,20 @@
 {
   "name": "hardhat-project",
   "devDependencies": {
-    "@nomiclabs/hardhat-etherscan": "^2.1.8",
-    "@openzeppelin/contracts": "^4.4.1",
-    "hardhat": "^2.7.1"
+    "@nomiclabs/hardhat-etherscan": "^3.0.1",
+    "@openzeppelin/contracts": "^4.5.0",
+    "hardhat": "^2.8.4"
   },
   "dependencies": {
-    "@alch/alchemy-web3": "^1.1.9",
+    "@alch/alchemy-web3": "^1.2.4",
     "@nomiclabs/hardhat-ethers": "^2.0.3",
     "@openzeppelin/contracts-upgradeable": "^4.4.1",
-    "dotenv": "^10.0.0",
+    "dotenv": "^16.0.0",
+    "ethers": "^5.5.4",
     "keccak256": "^1.0.6",
     "merkletreejs": "^0.2.27",
-    "swr": "^1.1.2"
+    "swr": "^1.1.2",
+    "truffle-plugin-verify": "^0.5.21",
+    "web3": "^1.7.0"
   }
 }
