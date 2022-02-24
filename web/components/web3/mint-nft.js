@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react';
 import { mintGift, mintPublic, mintWhitelist, sampleNFT } from '@pages/utils/_web3';
 import MintNFTCard from './mint-nft-card';
 import useSWR from 'swr';
+import * as Utils from 'web3-utils';
 import Web3 from 'web3';
+import { ConstructionOutlined } from '@mui/icons-material';
 
 const NOT_CLAIMABLE = 0;
 const ALREADY_CLAIMED = 1;
 const CLAIMABLE = 2;
 
 const MintNFT = () => {
-  const web3 = new Web3(Web3.givenProvider)
-
   const fetcher = (url) => fetch(url).then((res) => res.json());
   const { active, account, chainId } = useWeb3React();
 
@@ -39,14 +39,15 @@ const MintNFT = () => {
       });
     }
     checkIfClaimed();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account])
 
 
   let giftProof = [];
   let giftValid = false;
   const giftRes = useSWR(active && account ? `/api/giftProof?address=${account}` : null, {
-    fetcher, revalidateIfStale: false, revalidateOnFocus: false, revalidateOnReconnect: false });
+    fetcher, revalidateIfStale: false, revalidateOnFocus: false, revalidateOnReconnect: false
+  });
   if (!giftRes.error && giftRes.data) {
     const { proof, valid } = giftRes.data;
     giftProof = proof;
@@ -65,44 +66,54 @@ const MintNFT = () => {
       sampleNFT.methods.mintGift(giftProof).call({ from: account }).then(() => {
         setGiftClaimable(CLAIMABLE);
       }).catch((err) => {
-        if (err.toString().includes('claimed')) { setGiftClaimable(ALREADY_CLAIMED)}
+        if (err.toString().includes('claimed')) { setGiftClaimable(ALREADY_CLAIMED) }
         else { setGiftClaimable(NOT_CLAIMABLE) }
       });
     }
     validateClaim();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [giftProof])
 
   let whitelistProof = [];
   let whitelistValid = false;
   const whitelistRes = useSWR(active && account ? `/api/whitelistProof?address=${account}` : null, {
-    fetcher, revalidateIfStale: false, revalidateOnFocus: false, revalidateOnReconnect: false });
+    fetcher, revalidateIfStale: false, revalidateOnFocus: false, revalidateOnReconnect: false
+  });
   if (!whitelistRes.error && whitelistRes.data) {
     const { proof, valid } = whitelistRes.data;
+
+    console.log(whitelistRes.data)
     whitelistProof = proof;
     whitelistValid = valid;
   }
 
   useEffect(() => {
     if (!active || !whitelistValid) {
+      console.log('======')
       setWhitelistClaimable(NOT_CLAIMABLE);
       return;
     } else if (alreadyClaimed) {
+      console.log('------')
       setWhitelistClaimable(ALREADY_CLAIMED);
       return;
     }
     async function validateClaim() {
       const amount = '0.01';
-      const amountToWei = web3.utils.toWei(amount, 'ether');
+      console.log(web3)
+      const amountToWei = Web3.utils.toWei(amount, 'ether');
+
+      // console.log(amountToWei)
+
       sampleNFT.methods.mintWhitelist(whitelistProof).call({ from: account, value: amountToWei }).then(() => {
         setWhitelistClaimable(CLAIMABLE);
       }).catch((err) => {
-        if (err.toString().includes('claimed')) { setWhitelistClaimable(ALREADY_CLAIMED)}
+        console.log(err)
+        if (err.toString().includes('claimed')) { setWhitelistClaimable(ALREADY_CLAIMED) }
         else { setWhitelistClaimable(NOT_CLAIMABLE) }
       });
     }
     validateClaim();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [whitelistProof])
 
 

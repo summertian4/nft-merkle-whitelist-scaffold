@@ -9,6 +9,8 @@ import theme from '../styles/theme';
 import Footer from "@components/core-components/Footer";
 import { Web3Provider } from '@ethersproject/providers';
 import { Web3ReactProvider } from "@web3-react/core";
+import Web3 from 'web3';
+import { web3 } from './utils/_web3';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -30,11 +32,11 @@ export default function MyApp(props) {
       </Head>
       <ThemeProvider theme={theme}>
         <Web3ReactProvider getLibrary={getLibrary}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
         </Web3ReactProvider>
       </ThemeProvider>
     </CacheProvider>

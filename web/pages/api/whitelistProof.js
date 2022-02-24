@@ -5,7 +5,7 @@ const c = cache();
 
 const run = (req, res) => (fn) => new Promise((resolve, reject) => {
   fn(req, res, (result) =>
-      result instanceof Error ? reject(result) : resolve(result)
+    result instanceof Error ? reject(result) : resolve(result)
   )
 })
 
@@ -29,7 +29,7 @@ const handler = async (req, res) => {
 
   const address = req.query.address;
   if (!address) {
-    res.status(400).json({ msg: "address is required"});
+    res.status(400).json({ msg: "address is required" });
     return;
   }
 

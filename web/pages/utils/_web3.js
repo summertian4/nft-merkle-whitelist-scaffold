@@ -6,14 +6,23 @@ import { useEffect, useState } from "react";
 import Web3 from 'web3';
 
 /** Do not destructure env variables */
-const INFURA_ID =  process.env.NEXT_PUBLIC_INFURA_ID;
+const INFURA_ID = process.env.NEXT_PUBLIC_INFURA_ID;
 const NFT_ADDRESS = process.env.NEXT_PUBLIC_NFT_ADDRESS;
 const ENVIRONMENT = process.env.NEXT_PUBLIC_ENVIRONMENT;
 
-const web3 = new Web3(Web3.givenProvider)
+export const NODE_URL = "https://matic-mumbai.chainstacklabs.com";
+export const provider = new Web3.providers.HttpProvider(NODE_URL);
+const { createAlchemyWeb3 } = require("@alch/alchemy-web3")
+export const web3 = createAlchemyWeb3(
+  "https://polygon-mumbai.g.alchemy.com/v2/-hsxzrj06MeDTr4VpzvXtCDPLLEVVoc2"
+)
+
+// const web3 = new Web3(Web3.givenProvider)
 const contractABI = require("/data/SampleNFT.json");
 
-const acceptedChains = ENVIRONMENT === 'development' ? [1, 3, 4, 5, 42] : [1, 2];
+// const acceptedChains = ENVIRONMENT === 'development' ? [1, 3, 4, 5, 42] : [1, 2];
+
+const acceptedChains = [80001]
 
 export const sampleNFT = new web3.eth.Contract(contractABI.abi, NFT_ADDRESS);
 
@@ -31,15 +40,15 @@ export const walletlink = new WalletLinkConnector({
 export const mintGift = async (account, proof) => {
   console.log('minting gift...');
   const result = sampleNFT.methods.mintGift(proof).send({ from: account }).then((result) => {
-      return {
-        success: true,
-        status: `✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result
-        };
+    return {
+      success: true,
+      status: `✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result
+    };
   }).catch((err) => {
     return {
       success: false,
       status: "😥 Something went wrong: " + err.message
-      }
+    }
   });
   return result;
 };
@@ -47,43 +56,43 @@ export const mintGift = async (account, proof) => {
 export const mintWhitelist = async (account, proof) => {
   console.log('minting whitelist...');
   const amount = '0.01';
-    const amountToWei = web3.utils.toWei(amount, 'ether');
+  const amountToWei = web3.utils.toWei(amount, 'ether');
   const result = sampleNFT.methods.mintWhitelist(proof).send({ from: account, value: amountToWei }).then((result) => {
     console.log(`✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result);
-      return {
-        success: true,
-        status: `✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result
-        };
+    return {
+      success: true,
+      status: `✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result
+    };
   }).catch((err) => {
     console.log("Mint transaction failed!");
     return {
       success: false,
       status: "😥 Something went wrong: " + err.message
-      }
+    }
   }).finally((result) => {
     return result;
   });
   return result;
 }
 
-  export const mintPublic = async (account, numberOfTokens) => {
-    console.log('minting publicMint...');
-    const amount = (numberOfTokens * 0.02).toString();
-    const amountToWei = web3.utils.toWei(amount, 'ether');
-    const result = sampleNFT.methods.publicMint(numberOfTokens).send({ from: account, value: amountToWei }).then((result) => {
-      console.log(`✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result);
-        return {
-          success: true,
-          status: `✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result
-          };
-    }).catch((err) => {
-      console.log("Mint transaction failed!");
-      return {
-        success: false,
-        status: "😥 Something went wrong: " + err.message
-        }
-    });
-    return result;
+export const mintPublic = async (account, numberOfTokens) => {
+  console.log('minting publicMint...');
+  const amount = (numberOfTokens * 0.02).toString();
+  const amountToWei = web3.utils.toWei(amount, 'ether');
+  const result = sampleNFT.methods.publicMint(numberOfTokens).send({ from: account, value: amountToWei }).then((result) => {
+    console.log(`✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result);
+    return {
+      success: true,
+      status: `✅ Check out your transaction on Etherscan: https://etherscan.io/tx/` + result
+    };
+  }).catch((err) => {
+    console.log("Mint transaction failed!");
+    return {
+      success: false,
+      status: "😥 Something went wrong: " + err.message
+    }
+  });
+  return result;
 };
 
 export function abridgeAddress(hex, length = 4) {
@@ -105,7 +114,7 @@ export const useENSName = (library, address) => {
             setENSName(name);
           }
         })
-        .catch(() => {});
+        .catch(() => { });
 
       return () => {
         stale = true;
@@ -117,4 +126,4 @@ export const useENSName = (library, address) => {
   return ENSName;
 }
 
-export default function blank() { return <></>}
+export default function blank() { return <></> }
