@@ -1,7 +1,12 @@
 require("dotenv").config()
 
-// const API_URL = process.env.RINKEBY_API_URL // change this based on the network
-const API_URL = process.env.MUMBAI_API_URL // change this based on the network
+// change this based on the network
+var API_URL = ""
+if (process.env.NETWORK == "MAINNET") {
+  API_URL = process.env.MAINNET_API_URL
+} else if (process.env.NETWORK == "POLYGON") {
+  API_URL = process.env.POLYGON_API_URL
+}
 const PUBLISHER_ADDRESS = process.env.PUBLISHER_ADDRESS
 const PUBLISHER_PRIVATE_KEY = process.env.PUBLISHER_PRIVATE_KEY
 
